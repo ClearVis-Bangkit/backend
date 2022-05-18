@@ -17,10 +17,6 @@ const Users = db.define('user', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    refreshToken: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    }
 }, {
     freezeTableName: true,
 });

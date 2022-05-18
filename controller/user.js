@@ -52,16 +52,7 @@ const loginHandler = async (req, res) => {
     try {
         const { id, name } = user;
         const accessToken = jwt.sign({ id, name, email }, process.env.ACCESS_TOKEN, {
-            expiresIn: '300s',
-        });
-        const refreshToken = jwt.sign({ id, name, email }, process.env.REFRESH_TOKEN);
-        await Users.update({ refresh_token: refreshToken }, {
-            where: {
-                id,
-            },
-        });
-        res.cookie('refreshToken', refreshToken, {
-            httpOnly: true
+            expiresIn: '31536000s',
         });
         return res.json({
             success: true,
@@ -79,25 +70,7 @@ const loginHandler = async (req, res) => {
 }
 
 const logoutHandler = async (req, res) => {
-    const tokenCookie = req.cookies.refreshToken;
-    if (!tokenCookie) return res.status(204).json({ message: 'Cookie tidak ditemukan' });
-    const user = await Users.findOne({
-        where: {
-            refresh_token: tokenCookie,
-        },
-    });
-    if (!user) return res.status(204).json({ message: 'Cookie tidak valid' });
-    try {
-        await Users.update({ refresh_token: null }, {
-            where: {
-                id: user.id,
-            },
-        });
-        res.clearCookie('refreshToken');
-        res.status(200).json({ status: true, message: 'Berhasil logout' });
-    } catch (err) {
-        return res.status(500).json({ status: false, message: 'Server error' });
-    }
+
 };
 
 module.exports = {
