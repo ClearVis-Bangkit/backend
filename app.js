@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const userRouter = require('./router/user');
-const postHistory = require('./router/postHistory')
+const historyRouter = require('./router/history')
 const db = require('./config/database');
 
 const app = express();
@@ -28,7 +28,7 @@ db.authenticate()
 
 
 app.use(userRouter)
-app.use('/history', postHistory)
+app.use('/history', historyRouter)
 app.use('/historyPhoto', express.static('historyPhoto'))
 
 app.listen(port, () => {

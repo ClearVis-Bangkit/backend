@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { historyHandler } = require('../controller/postHistory');
+const { postHistoryHandler, getHistoryHandler } = require('../controller/history');
 const { verifyToken } = require('../middleware/verifyToken');
 const multer = require('multer');
 const storage = multer.diskStorage({
@@ -12,7 +12,8 @@ const storage = multer.diskStorage({
 })
 const upload = multer({storage: storage})
 
-router.post('/', verifyToken, upload.single('image'), historyHandler);
+router.post('/', verifyToken, upload.single('image'), postHistoryHandler);
+router.get('/', getHistoryHandler)
 
 
 module.exports = router;
