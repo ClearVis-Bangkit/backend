@@ -21,6 +21,18 @@ const Users = db.define('user', {
     freezeTableName: true,
 });
 
+const userHistory = db.define('history', {
+    userId: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    image: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    }
+})
+
 module.exports = {
     Users,
+    userHistory,
 };
