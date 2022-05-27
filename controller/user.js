@@ -4,7 +4,8 @@ const { Users } = require('../models/tabelmodels');
 
 const regisHandler = async (req, res) => {
     const { name, email, password, confirmPassword } = req.body;
-    if (password !== confirmPassword) return res.status(401).json({
+    if (password !== confirmPassword) return res.status(403).json({
+        success: false,
         message: 'Password dan Konfirmasi Password harus sama'
     });
     const user = await Users.findOne({
@@ -13,6 +14,7 @@ const regisHandler = async (req, res) => {
         }
     })
     if (user !== null) return res.status(403).json({
+        success: false,
         message: 'Email telah terdaftar'
     })
     const salt = await bcrypt.genSalt();
@@ -24,10 +26,12 @@ const regisHandler = async (req, res) => {
             password: hastPassword
         })
         return res.status(201).json({
+            success: true,
             message: 'Berhasil mendaftar, silakan login'
         })
     } catch (error) {
         return res.status(501).json({
+            success: false,
             message: 'Gagal mendaftar, server error'
         })
     }
@@ -41,12 +45,14 @@ const loginHandler = async (req, res) => {
         },
     });
     if (user === null) {
-        return res.json({
+        return res.status(404).json({
+            success: false,
             message: 'Email tidak terdaftar'
         });
     }
     const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.json({
+    if (!match) return res.status(403).json({
+        success: false,
         message: 'Password salah'
     });
     try {
@@ -54,7 +60,7 @@ const loginHandler = async (req, res) => {
         const accessToken = jwt.sign({ id, name, email }, process.env.ACCESS_TOKEN, {
             expiresIn: '31536000s',
         });
-        return res.json({
+        return res.status(201).json({
             success: true,
             data: {
                 name,
@@ -62,7 +68,7 @@ const loginHandler = async (req, res) => {
             },
         });
     } catch (err) {
-        return res.status(500).json({
+        return res.status(501).json({
             success: false,
             message: 'Server error',
         });
