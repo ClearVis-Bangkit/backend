@@ -4,6 +4,14 @@ const { Users } = require('../models/tabelmodels');
 
 const regisHandler = async (req, res) => {
     const { name, email, password, confirmPassword } = req.body;
+    if (name === undefined || email === undefined) return res.status(404).json({
+        success: false,
+        message: 'Nama atau Email diisi'
+    });
+    if (password === undefined || confirmPassword === undefined) return res.status(404).json({
+        success: false,
+        message: 'Password atau Konfirmasi password harus diisi'
+    });
     if (password !== confirmPassword) return res.status(403).json({
         success: false,
         message: 'Password dan Konfirmasi Password harus sama'
@@ -39,6 +47,10 @@ const regisHandler = async (req, res) => {
 
 const loginHandler = async (req, res) => {
     const { email, password } = req.body;
+    if (email === undefined || password === undefined) return res.status(404).json({
+        success: false,
+        msg: 'Email atau password harus diisi'
+    })
     const user = await Users.findOne({
         where: {
             email,

@@ -27,7 +27,7 @@ const userHistory = db.define('history', {
         allowNull: false,
     },
     status: {
-        type: DataTypes.BOOLEAN,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     image: {
