@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const userRouter = require('./router/user');
 const historyRouter = require('./router/history')
+const artikelRouter = require('./router/artikel')
 const db = require('./config/database');
 const fileUpload = require("express-fileupload");
 
@@ -38,6 +39,7 @@ db.authenticate()
 app.use(userRouter)
 app.use('/history', historyRouter)
 app.use('/historyPhoto', express.static('historyPhoto'))
+app.use(artikelRouter)
 
 app.listen(port, () => {
     console.log('Server running on port 5000');
